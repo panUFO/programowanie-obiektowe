@@ -1,0 +1,114 @@
+//import java.util.Scanner; // importowanie biblioteki do wczytania danych
+import java.lang.Object; //?
+
+
+class Obsluga {
+
+//stworzenie pracownikow
+	
+	Pracownik pracownik[]= new Pracownik[10]; //???
+
+//wyswietlanie wszystkich pracownikow
+
+	static void a() {
+		for (int i=0; i<10; i++)
+			{
+				System.out.println("\nnr pracownika: " +i);
+				System.out.println("\nimie: " +pracownik[i].imie);
+				System.out.println("\npensja: " +pracownik[i].pensja);
+				System.out.println("\nurlop: " +pracownik[i].urlop);
+			}
+		}
+
+//dodaj pracownika
+//ograniczona tablica?	
+	static void b() {
+		
+		
+		
+		pracownik[].imie=(String)System.in.read();
+		pracownik[].pensja=(int)System.in.read();
+		pracownik[].urlop=(boolean)System.in.read();
+	}
+
+
+//daj podwyzke
+
+	static void c(){
+		System.out.println("\nPodaj nr pracownika: ");
+		int i = (int)System.in.read();
+		System.out.println("\nPodaj ilosc podwyzki ");
+		int dolary = (int)System.in.read();
+		pracownik[i].pensja+=dolary;
+	}
+
+//przenies pracownika na urlop
+
+	static void d(){
+		System.out.println("\nPodaj nr pracownika: ");
+		int i = (int)System.in.read();
+		pracownik[i].urlop=true;
+	}
+
+//zapisz do pliku raports
+	static void e(){
+	}
+
+
+//funkcja wyswietlajaca menu programu i zmieniajaca
+
+	public static void main(String args[]) {
+	
+//		Scanner odczyt = new Scanner (System.in); // obiekt klasy Scanner z parametrem System.in
+
+
+
+
+//menu programu
+//wypisanie
+		System.out.println("\n a. Wyswietl wszystkich pracownikow");
+		System.out.println("\n b. Dodaj pracownika");
+		System.out.println("\n c. Daj podwyzke dla pracownikow");
+		System.out.println("\n d. Przenies pracownika na urlop");
+		System.out.println("\n e. Zapisz do pliku raport");
+		System.out.println("\n\n x. Zakoncz program\n");
+		
+//wybór
+	
+	do {
+
+		char z = (char)System.in.read();
+	//	string z=odczyt.nextLine(); //z = zmienna do wprowadzania znakow w menu
+		
+		switch (z) {
+				case 'a': 
+						Obsluga.a();//funkcja wyswietlania wszystkich pracownikow
+						break;
+				case 'b':
+						Obsluga.b();//Dodaj pracownika
+						break;
+				case 'c':
+						Obsluga.c();//Daj podwyzke dla pracownikow
+						break;
+				case 'd':
+						Obsluga.d();//Przenies pracownika na urlop
+						break;
+				case 'e':
+						Obsluga.e();//Zapisz do pliku raport
+						break;
+
+				default:System.out.println("\nError, podano zly klawisz");
+						break;
+			}
+
+} while (z != 'x');   // z cannot be resolved???
+}
+}
+
+
+class Pracownik
+{
+	String imie;
+	int pensja;
+	boolean urlop;
+}
