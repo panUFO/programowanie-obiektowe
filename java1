@@ -1,8 +1,17 @@
-//import java.util.Scanner; // importowanie biblioteki do wczytania danych
+import java.util.Scanner; // importowanie biblioteki do wczytania danych
 import java.lang.Object; //?
 
 
+
 class Obsluga {
+
+static int id=0; //zmienna do zliczania pracownikow/id 
+
+//funkcja zliczająca pracownikow
+
+	void ilosc_pracownikow() {
+		id++;
+	}
 
 //stworzenie pracownikow
 	
@@ -10,7 +19,7 @@ class Obsluga {
 
 //wyswietlanie wszystkich pracownikow
 
-	static void a() {
+	void a() {
 		for (int i=0; i<10; i++)
 			{
 				System.out.println("\nnr pracownika: " +i);
@@ -22,19 +31,22 @@ class Obsluga {
 
 //dodaj pracownika
 //ograniczona tablica?	
-	static void b() {
+	void b() {
+	pracownik[id]=new Pracownik();	
 		
-		
-		
-		pracownik[].imie=(String)System.in.read();
-		pracownik[].pensja=(int)System.in.read();
-		pracownik[].urlop=(boolean)System.in.read();
+		System.out.println("\nPodaj imie: ");
+		pracownik[id].imie=(String)System.in.read();
+		System.out.println("\nPodaj pensje: ");
+		pracownik[id].pensja=(int)System.in.read();
+		System.out.println("\nUrlop?: ");
+		pracownik[id].urlop=(boolean)System.in.read();
+		ilosc_pracownikow();
 	}
 
 
 //daj podwyzke
 
-	static void c(){
+	void c(){
 		System.out.println("\nPodaj nr pracownika: ");
 		int i = (int)System.in.read();
 		System.out.println("\nPodaj ilosc podwyzki ");
@@ -44,14 +56,14 @@ class Obsluga {
 
 //przenies pracownika na urlop
 
-	static void d(){
+	void d(){
 		System.out.println("\nPodaj nr pracownika: ");
 		int i = (int)System.in.read();
 		pracownik[i].urlop=true;
 	}
 
 //zapisz do pliku raports
-	static void e(){
+	void e(){
 	}
 
 
@@ -72,37 +84,41 @@ class Obsluga {
 		System.out.println("\n d. Przenies pracownika na urlop");
 		System.out.println("\n e. Zapisz do pliku raport");
 		System.out.println("\n\n x. Zakoncz program\n");
-		
+
+
+		Obsluga o = new Obsluga();
+
+	
 //wybór
 	
-	do {
+		do {
 
-		char z = (char)System.in.read();
-	//	string z=odczyt.nextLine(); //z = zmienna do wprowadzania znakow w menu
+			char z = (char)System.in.read();
+		//	string z=odczyt.nextLine(); //z = zmienna do wprowadzania znakow w menu
 		
-		switch (z) {
-				case 'a': 
-						Obsluga.a();//funkcja wyswietlania wszystkich pracownikow
+			switch (z) {
+					case 'a': 
+						o.a();//funkcja wyswietlania wszystkich pracownikow
 						break;
-				case 'b':
-						Obsluga.b();//Dodaj pracownika
+					case 'b':
+						o.b();//Dodaj pracownika
 						break;
-				case 'c':
-						Obsluga.c();//Daj podwyzke dla pracownikow
+					case 'c':
+						o.c();//Daj podwyzke dla pracownikow
 						break;
-				case 'd':
-						Obsluga.d();//Przenies pracownika na urlop
+					case 'd':
+						o.d();//Przenies pracownika na urlop
 						break;
-				case 'e':
-						Obsluga.e();//Zapisz do pliku raport
+					case 'e':
+						o.e();//Zapisz do pliku raport
 						break;
 
-				default:System.out.println("\nError, podano zly klawisz");
+					default:System.out.println("\nError, podano zly klawisz");
 						break;
-			}
+					}
 
-} while (z != 'x');   // z cannot be resolved???
-}
+			} while (z != 'x');   // z cannot be resolved???
+	}
 }
 
 
