@@ -33,7 +33,7 @@ static int id=0; //zmienna do zliczania pracownikow/id
 //ograniczona tablica?	
 	void b() {
 	pracownik[id]=new Pracownik();	
-		
+	
 		System.out.println("\nPodaj imie: ");
 		pracownik[id].imie=(String)System.in.read();
 		System.out.println("\nPodaj pensje: ");
@@ -41,6 +41,9 @@ static int id=0; //zmienna do zliczania pracownikow/id
 		System.out.println("\nUrlop?: ");
 		pracownik[id].urlop=(boolean)System.in.read();
 		ilosc_pracownikow();
+
+
+        
 	}
 
 
@@ -90,10 +93,10 @@ static int id=0; //zmienna do zliczania pracownikow/id
 
 	
 //wybór
-	
+	char z;
 		do {
 
-			char z = (char)System.in.read();
+		z = (char)System.in.read();
 		//	string z=odczyt.nextLine(); //z = zmienna do wprowadzania znakow w menu
 		
 			switch (z) {
