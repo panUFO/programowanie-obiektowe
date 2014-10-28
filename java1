@@ -1,3 +1,5 @@
+package aaa;
+
 import java.util.Scanner; 
 import java.lang.Object;
 import java.io.*;
@@ -5,21 +7,23 @@ import java.io.*;
 
 class Obsluga {
 
-	static public int id=0; //zmienna do zliczania pracownikow/id 
-	Scanner in = new Scanner(System.in);
+	static public int id=0; //zmienna do zliczasnia pracownikow/id 
+	static Scanner in = new Scanner(System.in);
 
 
-	void ilosc_pracownikow() {
+	void ilosc_pracownikow() 
+	{
 		id++;
 	}
 
 	
-	Pracownik pracownik[]= new Pracownik[10]; //???
+	static Pracownik pracownik[]= new Pracownik[10]; //???
 
 
 //wyswietlanie wszystkich pracownikow
 
-	void a() {
+	void a() 
+	{
 		for (int i=0; i<10; i++)
 			{
 				System.out.println("\nnr pracownika: " +pracownik[i].Nr_pracownika);
@@ -27,34 +31,39 @@ class Obsluga {
 				System.out.println("\npensja: " +pracownik[i].pensja);
 				System.out.println("\nurlop: " +pracownik[i].urlop);
 			}
-		}
+	}
 
 //dodaj pracownika
 
-	void b() throws IOException {
-	pracownik[id]=new Pracownik();
-	InputStreamReader isr = new InputStreamReader(System.in);
-	BufferedReader br = new BufferedReader(isr);	
+	void b() throws IOException 
+	{
+		int id;
+		pracownik[id]=new Pracownik();
+		InputStreamReader isr = new InputStreamReader(System.in);
+		BufferedReader br = new BufferedReader(isr);	
 		
-			pracownik[id].Nr_pracownika=id+1;
+		if (id<10)
+		{
+				pracownik[id].Nr_pracownika=id+1;
 			
-		System.out.println("Podaj imie: ");
-			pracownik[id].imie=in.next();
+			System.out.println("Podaj imie: ");
+				pracownik[id].imie=br.readLine();
 
-		System.out.println("Podaj pensje: ");
-			pracownik[id].pensja=in.nextInt();
+			System.out.println("Podaj pensje: ");
+				pracownik[id].pensja=in.nextInt();
 
-		System.out.println("Urlop?: ");
-			pracownik[id].urlop=in.nextBoolean();
+			System.out.println("Urlop?: ");
+				pracownik[id].urlop=in.nextBoolean();
 		
-		ilosc_pracownikow();
-      
+			ilosc_pracownikow();
+		} else System.out.println("Stworzono wiecej niz 10 pracownikow, dodawanie zablokowane");
 	}
 
 
 //daj podwyzke
 
-	void c(){
+	void c()
+	{
 		int dolary; //wysokosc podwyzki
 		int i; //nr pracownika !!do zmiany!!
 		System.out.println("\nPodaj nr pracownika: ");
@@ -77,7 +86,7 @@ class Obsluga {
 
 //usuwanie pracowników
 
-	public static void usunPracownikow()
+	static void usunPracownikow()
 	{
 		for(int id=0; id<10; id++)
 		{
@@ -95,15 +104,14 @@ class Obsluga {
 //zapisz raport do pliku 
 
 
-	public static String pracownicy_linijki(){
+	public static String pracownicy_wiersze()
+	{
 	
-		String wiersz = new String(Pracownik.Nr_pracownika+";"+Pracownik.imie+";"+Pracownik.pensja
-
-+";"+Pracownik.urlop);
+		String wiersz = new String(Pracownik.Nr_pracownika+";"+Pracownik.imie+";"+Pracownik.pensja+";"+Pracownik.urlop);
 		return wiersz;
 	}
 
-
+	
 
 //pobierz nazwe pliku
 
@@ -111,7 +119,7 @@ class Obsluga {
 	{
 		String nazwaPliku;
 		System.out.print("Podaj nazwe pliku: ");
-		nazwaPliku = dane.next();
+		nazwaPliku = in.next();
 		
 		return nazwaPliku;
 	}
@@ -122,14 +130,14 @@ class Obsluga {
 
 	
 
-	public static void zapiszListePracownikow() throws FileNotFoundException 
+	public void zapiszListePracownikow() throws FileNotFoundException 
 	{
 		int id;
 		PrintWriter plik = new PrintWriter(wpiszNazwePliku());
 		
 		for(id=0; pracownik[id] != null; id++)
 		{
-			plik.println(pracownicy_linijki(spracownik[id]));
+			plik.println(pracownicy_wiersze(pracownik[id]));
 		}
 		
 		plik.close();
@@ -155,46 +163,26 @@ class Obsluga {
 		usunPracownikow();
 		
 		File plik = new File(nazwaPliku);
-		Scanner danePlik = new Scanner(plik);
+		Scanner inPlik = new Scanner(plik);
 		
-		for(id=0; danePlik.hasNext(); id++){
+		for(id=0; inPlik.hasNext(); id++){
 
-			idPracownika = danePlik.nextInt();
-			imie = danePlik.next();
-			pensja = danePlik.nextInt();
-			urlop = urlopStringNaBoolean(danePlik.next());
+			idPracownika = inPlik.nextInt();
+			imie = inPlik.next();
+			pensja = inPlik.nextInt();
+			urlop = inPlik.next();
 			
 			pracownik[id] = new Pracownik(idPracownika, imie, pensja, urlop);
 		}
 		
-		danePlik.close();
+		inPlik.close();
 		ilosc_pracownikow = id;
 	}
 
 
 
 
-
-
-
-
-
-
-	
-		
-
-
-
-
-
-
-
-
-	void e(){
-	}
-
-
-public static void wyswietlMenu()
+	public static void wyswietlMenu()
 	{
 
 		System.out.println("\n a. Wyswietl wszystkich pracownikow");
@@ -218,7 +206,7 @@ public static void wyswietlMenu()
 //menu programu
 //wypisanie
 
-	
+	 wyswietlMenu();
 
 		
 
@@ -245,7 +233,7 @@ public static void wyswietlMenu()
 						o.d();//Przenies pracownika na urlop
 						break;
 					case 'e':
-						o.e();//Zapisz do pliku raport
+						o.zapiszListePracownikow();//Zapisz do pliku raport
 						break;
 
 					default:System.out.println("\nError, podano zly klawisz");
@@ -257,37 +245,33 @@ public static void wyswietlMenu()
 }
 
 
+
+
+
+
 class Pracownik
 {
-	int Nr_pracownika;
+	int nr_pracownika;
 	String imie;
 	int pensja;
 	boolean urlop;
 	int id;
 	Obsluga o = new Obsluga();
 	
-		public ograniczenie_prac () {
-			if (id<10)
-				o.a();
-			else {
-				System.out.println("Stworzono wiecej niz 10 pracownikow, dodawanie zablokowane");
-				return null;
-			}
-		}
 					
 
 
-	public Pracownik(int id, String imie, int pensja, boolean urlop){
+		public Pracownik(int id, String imie, int pensja, boolean urlop)
+		{
 
-		this.Nr_pracownika = Nr_pracownika;
-		this.imie = imie;
-		this.pensja = pensja;
-		this.urlop = urlop;
-	}
+			this.nr_pracownika = nr_pracownika;
+			this.imie = imie;
+			this.pensja = pensja;
+			this.urlop = urlop;
+		}
 	
-	public Pracownik(){s
-	}
-	
-
-
+		public Pracownik()
+		{
+		
+		}
 }
