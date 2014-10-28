@@ -1,28 +1,28 @@
-import java.util.Scanner; // importowanie biblioteki do wczytania danych
-import java.lang.Object; //?
-
+import java.util.Scanner; 
+import java.lang.Object;
+import java.io.*;
 
 
 class Obsluga {
 
-static int id=0; //zmienna do zliczania pracownikow/id 
+	static public int id=0; //zmienna do zliczania pracownikow/id 
+	Scanner in = new Scanner(System.in);
 
-//funkcja zliczająca pracownikow
 
 	void ilosc_pracownikow() {
 		id++;
 	}
 
-//stworzenie pracownikow
 	
 	Pracownik pracownik[]= new Pracownik[10]; //???
+
 
 //wyswietlanie wszystkich pracownikow
 
 	void a() {
 		for (int i=0; i<10; i++)
 			{
-				System.out.println("\nnr pracownika: " +i);
+				System.out.println("\nnr pracownika: " +pracownik[i].Nr_pracownika);
 				System.out.println("\nimie: " +pracownik[i].imie);
 				System.out.println("\npensja: " +pracownik[i].pensja);
 				System.out.println("\nurlop: " +pracownik[i].urlop);
@@ -30,74 +30,209 @@ static int id=0; //zmienna do zliczania pracownikow/id
 		}
 
 //dodaj pracownika
-//ograniczona tablica?	
-	void b() {
-	pracownik[id]=new Pracownik();	
+
+	void b() throws IOException {
+	pracownik[id]=new Pracownik();
+	InputStreamReader isr = new InputStreamReader(System.in);
+	BufferedReader br = new BufferedReader(isr);	
 		
-		System.out.println("\nPodaj imie: ");
-		pracownik[id].imie=(String)System.in.read();
-		System.out.println("\nPodaj pensje: ");
-		pracownik[id].pensja=(int)System.in.read();
-		System.out.println("\nUrlop?: ");
-		pracownik[id].urlop=(boolean)System.in.read();
+			pracownik[id].Nr_pracownika=id+1;
+			
+		System.out.println("Podaj imie: ");
+			pracownik[id].imie=in.next();
+
+		System.out.println("Podaj pensje: ");
+			pracownik[id].pensja=in.nextInt();
+
+		System.out.println("Urlop?: ");
+			pracownik[id].urlop=in.nextBoolean();
+		
 		ilosc_pracownikow();
+      
 	}
 
 
 //daj podwyzke
 
 	void c(){
+		int dolary; //wysokosc podwyzki
+		int i; //nr pracownika !!do zmiany!!
 		System.out.println("\nPodaj nr pracownika: ");
-		int i = (int)System.in.read();
+		i = in.nextInt();
 		System.out.println("\nPodaj ilosc podwyzki ");
-		int dolary = (int)System.in.read();
-		pracownik[i].pensja+=dolary;
+		dolary = in.nextInt();
+		pracownik[i-1].pensja+=dolary;
 	}
 
 //przenies pracownika na urlop
 
 	void d(){
+		int i; // do zmiany!!!
 		System.out.println("\nPodaj nr pracownika: ");
-		int i = (int)System.in.read();
-		pracownik[i].urlop=true;
+		i = in.nextInt();
+		pracownik[i-1].urlop=true;
 	}
 
-//zapisz do pliku raports
+
+
+//usuwanie pracowników
+
+	public static void usunPracownikow()
+	{
+		for(int id=0; id<10; id++)
+		{
+			pracownik[id] = null;
+		}
+	}
+
+
+
+/////////////////////////////////////////////////
+
+
+
+
+//zapisz raport do pliku 
+
+
+	public static String pracownicy_linijki(){
+	
+		String wiersz = new String(Pracownik.Nr_pracownika+";"+Pracownik.imie+";"+Pracownik.pensja
+
++";"+Pracownik.urlop);
+		return wiersz;
+	}
+
+
+
+//pobierz nazwe pliku
+
+	public static String wpiszNazwePliku()
+	{
+		String nazwaPliku;
+		System.out.print("Podaj nazwe pliku: ");
+		nazwaPliku = dane.next();
+		
+		return nazwaPliku;
+	}
+
+
+
+//zapisanie pliku
+
+	
+
+	public static void zapiszListePracownikow() throws FileNotFoundException 
+	{
+		int id;
+		PrintWriter plik = new PrintWriter(wpiszNazwePliku());
+		
+		for(id=0; pracownik[id] != null; id++)
+		{
+			plik.println(pracownicy_linijki(spracownik[id]));
+		}
+		
+		plik.close();
+
+	}
+
+
+///dopisac metode ktora odczytuje z pliku pracownikow i dopisuje ich do aktualnej bazy
+
+
+
+
+	public static void wczytajPracownikow() throws FileNotFoundException
+	{
+		int id;
+		int idPracownika;
+		String imie;
+		int pensja;
+		boolean urlop;
+		
+		String nazwaPliku = wpiszNazwePliku();
+		
+		usunPracownikow();
+		
+		File plik = new File(nazwaPliku);
+		Scanner danePlik = new Scanner(plik);
+		
+		for(id=0; danePlik.hasNext(); id++){
+
+			idPracownika = danePlik.nextInt();
+			imie = danePlik.next();
+			pensja = danePlik.nextInt();
+			urlop = urlopStringNaBoolean(danePlik.next());
+			
+			pracownik[id] = new Pracownik(idPracownika, imie, pensja, urlop);
+		}
+		
+		danePlik.close();
+		ilosc_pracownikow = id;
+	}
+
+
+
+
+
+
+
+
+
+
+	
+		
+
+
+
+
+
+
+
+
 	void e(){
 	}
 
 
-//funkcja wyswietlajaca menu programu i zmieniajaca
+public static void wyswietlMenu()
+	{
 
-	public static void main(String args[]) {
-	
-//		Scanner odczyt = new Scanner (System.in); // obiekt klasy Scanner z parametrem System.in
-
-
-
-
-//menu programu
-//wypisanie
 		System.out.println("\n a. Wyswietl wszystkich pracownikow");
 		System.out.println("\n b. Dodaj pracownika");
 		System.out.println("\n c. Daj podwyzke dla pracownikow");
 		System.out.println("\n d. Przenies pracownika na urlop");
 		System.out.println("\n e. Zapisz do pliku raport");
+		System.out.println("\n f. Wczytaj liste pracownikow");
 		System.out.println("\n\n x. Zakoncz program\n");
+	}
 
 
-		Obsluga o = new Obsluga();
+
+//funkcja wyswietlajaca menu programu i zmieniajaca
+
+	public static void main(String args[])  throws IOException { 
+	
+	Obsluga o = new Obsluga();
+	Pracownik p = new Pracownik();
+
+//menu programu
+//wypisanie
+
+	
+
+		
 
 	
 //wybór
-	
+	char z;
 		do {
 
-			char z = (char)System.in.read();
+		z = (char)System.in.read();
 		//	string z=odczyt.nextLine(); //z = zmienna do wprowadzania znakow w menu
 		
 			switch (z) {
 					case 'a': 
+					//p.ograniczenie_prac();
 						o.a();//funkcja wyswietlania wszystkich pracownikow
 						break;
 					case 'b':
@@ -124,7 +259,35 @@ static int id=0; //zmienna do zliczania pracownikow/id
 
 class Pracownik
 {
+	int Nr_pracownika;
 	String imie;
 	int pensja;
 	boolean urlop;
+	int id;
+	Obsluga o = new Obsluga();
+	
+		public ograniczenie_prac () {
+			if (id<10)
+				o.a();
+			else {
+				System.out.println("Stworzono wiecej niz 10 pracownikow, dodawanie zablokowane");
+				return null;
+			}
+		}
+					
+
+
+	public Pracownik(int id, String imie, int pensja, boolean urlop){
+
+		this.Nr_pracownika = Nr_pracownika;
+		this.imie = imie;
+		this.pensja = pensja;
+		this.urlop = urlop;
+	}
+	
+	public Pracownik(){s
+	}
+	
+
+
 }
