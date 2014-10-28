@@ -5,7 +5,9 @@ import java.io.*;
 
 class Obsluga {
 
-static int id=0; //zmienna do zliczania pracownikow/id 
+static public int id=0; //zmienna do zliczania pracownikow/id 
+Scanner in = new Scanner(System.in);
+
 
 //funkcja zliczająca pracownikow
 
@@ -22,7 +24,7 @@ static int id=0; //zmienna do zliczania pracownikow/id
 	void a() {
 		for (int i=0; i<10; i++)
 			{
-				System.out.println("\nnr pracownika: " +i);
+				System.out.println("\nnr pracownika: " +pracownik[i].Nr_pracownika);
 				System.out.println("\nimie: " +pracownik[i].imie);
 				System.out.println("\npensja: " +pracownik[i].pensja);
 				System.out.println("\nurlop: " +pracownik[i].urlop);
@@ -31,38 +33,46 @@ static int id=0; //zmienna do zliczania pracownikow/id
 
 //dodaj pracownika
 //ograniczona tablica?	
-	void b() {
-	pracownik[id]=new Pracownik();	
-	
-		System.out.println("\nPodaj imie: ");
-		pracownik[id].imie=(String)System.in.read();
-		System.out.println("\nPodaj pensje: ");
-		pracownik[id].pensja=(int)System.in.read();
-		System.out.println("\nUrlop?: ");
-		pracownik[id].urlop=(boolean)System.in.read();
+	void b() throws IOException {
+	pracownik[id]=new Pracownik();
+	InputStreamReader isr = new InputStreamReader(System.in);
+	BufferedReader br = new BufferedReader(isr);	
+		
+			pracownik[id].Nr_pracownika=id+1;
+			
+		System.out.println("Podaj imie: ");
+			pracownik[id].imie=in.next();
+
+		System.out.println("Podaj pensje: ");
+			pracownik[id].pensja=in.nextInt();
+
+		System.out.println("Urlop?: ");
+			pracownik[id].urlop=in.nextBoolean();
+		
 		ilosc_pracownikow();
-
-
-        
+      
 	}
 
 
 //daj podwyzke
 
 	void c(){
+		int dolary; //wysokosc podwyzki
+		int i; //nr pracownika !!do zmiany!!
 		System.out.println("\nPodaj nr pracownika: ");
-		int i = (int)System.in.read();
+		i = in.nextInt();
 		System.out.println("\nPodaj ilosc podwyzki ");
-		int dolary = (int)System.in.read();
-		pracownik[i].pensja+=dolary;
+		dolary = in.nextInt();
+		pracownik[i-1].pensja+=dolary;
 	}
 
 //przenies pracownika na urlop
 
 	void d(){
+		int i; // do zmiany!!!
 		System.out.println("\nPodaj nr pracownika: ");
-		int i = (int)System.in.read();
-		pracownik[i].urlop=true;
+		i = in.nextInt();
+		pracownik[i-1].urlop=true;
 	}
 
 //zapisz do pliku raports
@@ -74,10 +84,8 @@ static int id=0; //zmienna do zliczania pracownikow/id
 
 	public static void main(String args[])  throws IOException { 
 	
-//		Scanner odczyt = new Scanner (System.in); // obiekt klasy Scanner z parametrem System.in
-
-
-
+	Obsluga o = new Obsluga();
+	Pracownik p = new Pracownik();
 
 //menu programu
 //wypisanie
@@ -89,7 +97,7 @@ static int id=0; //zmienna do zliczania pracownikow/id
 		System.out.println("\n\n x. Zakoncz program\n");
 
 
-		Obsluga o = new Obsluga();
+		
 
 	
 //wybór
@@ -101,6 +109,7 @@ static int id=0; //zmienna do zliczania pracownikow/id
 		
 			switch (z) {
 					case 'a': 
+					//p.ograniczenie_prac();
 						o.a();//funkcja wyswietlania wszystkich pracownikow
 						break;
 					case 'b':
@@ -127,7 +136,20 @@ static int id=0; //zmienna do zliczania pracownikow/id
 
 class Pracownik
 {
+	int Nr_pracownika;
 	String imie;
 	int pensja;
 	boolean urlop;
+	int id;
+	Obsluga o = new Obsluga();
+	
+		public ograniczenie_prac () {
+			if (id<10)
+				o.a();
+			else {
+					System.out.println("Stworzono wiecej niz 10 pracownikow, dodawanie zablokowane");
+					return null;
+				 }
+		}
+					
 }
