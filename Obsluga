@@ -1,0 +1,506 @@
+
+//Kamil Liwiński 224657
+
+import java.util.Scanner; 
+import java.lang.Object;
+import java.io.*;
+							//laczenie sie do postgres
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.*;
+
+/*
+							//zapis bazy do pliku
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.PreparedStatement;
+//import java.sql.Connection;
+//import java.sql.DriverManager;
+import java.sql.ResultSet;
+//import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.postgresql.copy.CopyManager;
+import org.postgresql.core.BaseConnection;
+*/
+
+class Pracownik
+{
+   public int nr_pracownika;
+	String imie;
+	String nazwisko;
+	int pensja;
+	boolean urlop;
+	
+		
+
+
+		public Pracownik(int nr_pracownika, String imie, String nazwisko, int pensja, boolean urlop)
+		{
+
+			this.nr_pracownika = nr_pracownika;
+			this.imie = imie;
+			this.nazwisko=nazwisko;
+			this.pensja = pensja;
+			this.urlop = urlop;
+		}
+	
+}
+
+
+class Obsluga1 {
+
+	static public int ilosc_pracownikow=0; //zmienna do zliczasnia pracownikow/id 
+	static Scanner in = new Scanner(System.in);
+
+
+	
+	static public Pracownik[] pracownik= new Pracownik[10]; //???
+
+
+
+//wyswietlanie wszystkich pracownikow
+
+	static  void a() 
+	{
+		for (int i=0; i<10; i++)
+			{
+				if(pracownik[i]!=null)
+				{
+				System.out.println("\nnr pracownika: " +pracownik[i].nr_pracownika);
+				System.out.println("\nimie: " +pracownik[i].imie);
+				System.out.println("\nimie: " +pracownik[i].nazwisko);
+				System.out.println("\npensja: " +pracownik[i].pensja);
+				System.out.println("\nurlop: " +pracownik[i].urlop);
+				}
+				
+			}
+	}
+
+
+//dodaj pracownika
+
+	static  void b() throws IOException 
+	{
+		
+		int nr;
+		String imie;
+		String nazwisko;
+		int pensja;
+		boolean urlop;
+		InputStreamReader isr = new InputStreamReader(System.in);
+		BufferedReader br = new BufferedReader(isr);	
+		
+		if (ilosc_pracownikow<10)
+		{
+		
+			System.out.println("Podaj nr: ");
+			nr=in.nextInt();
+			
+			System.out.println("Podaj imie: ");
+			imie=in.next();
+			
+			System.out.println("Podaj nazwisko: ");
+			nazwisko=in.next();
+
+			System.out.println("Podaj pensje: ");
+			pensja=in.nextInt();
+
+			System.out.println("Urlop?: ");
+			urlop=in.nextBoolean();
+			System.out.print("\n");	
+			pracownik[ilosc_pracownikow]=new Pracownik(nr, imie, nazwisko, pensja, urlop);	
+			ilosc_pracownikow++;
+			
+		} else System.out.println("Stworzono wiecej niz 10 pracownikow, dodawanie zablokowane");
+	}
+
+
+	
+//daj podwyzke
+
+	static void c()
+	{
+		int dolary; //wysokosc podwyzki
+		int nr; //nr pracownika !!do zmiany!!
+		System.out.println("\nPodaj nr pracownika: ");
+		nr = in.nextInt();
+		System.out.println("\nPodaj ilosc podwyzki ");
+		dolary = in.nextInt();
+		for(int i=0;pracownik[i].nr_pracownika==nr;i++) //zmienic
+		{
+			if(pracownik[i].nr_pracownika==nr){
+				pracownik[i].pensja+=dolary;
+			
+				break;
+			}
+				
+		}
+		
+	}
+
+
+//przenies pracownika na urlop
+
+	static void d()
+	{
+		int nr;
+		int i; // do zmiany!!!
+		System.out.println("\nPodaj nr pracownika: ");
+		nr = in.nextInt();
+		for(i=0;pracownik[i].nr_pracownika==nr;i++) //zmienic
+		{
+			if(pracownik[i].nr_pracownika==nr){
+				pracownik[i].urlop=true;
+			
+				break;
+			}		
+		}
+	}
+
+
+
+//usuwanie pracowników
+
+	static void usunPracownikow()
+	{
+		
+		for(int id=0; id<10; id++)
+		{
+			pracownik[id] = null;
+			ilosc_pracownikow--;
+		}
+	}
+
+
+//zapisz raport do pliku 
+
+	static public void zapiszListePracownikow() throws FileNotFoundException
+	{
+		PrintWriter wy = new PrintWriter("dane.txt");
+	
+		for(int i=0;i<10;i++)
+	     	if(pracownik[i]!=null)
+	      	{
+	    		wy.println(""+pracownik[i].nr_pracownika);
+	        	wy.println(""+pracownik[i].imie);
+	        	wy.println(""+pracownik[i].nazwisko);
+	        	wy.println(""+pracownik[i].pensja);
+	        	wy.println(""+pracownik[i].urlop);
+	        }
+		
+		wy.close();
+	}
+
+
+	
+//wczytanie z pliku do programu	
+	static public void WczytajZPliku()throws IOException 
+  {
+		
+		int id;
+		int nr_pracownika;
+		String imie;
+		String nazwisko;
+		int pensja;
+		boolean urlop;
+		
+		 File plik = new File("dane.txt");
+         Scanner danePlik = new Scanner(plik);
+
+
+      for(id=0; danePlik.hasNext(); id++){
+
+			nr_pracownika = danePlik.nextInt();
+			imie = danePlik.next();
+			nazwisko = danePlik.next();
+			pensja = danePlik.nextInt();
+			urlop = danePlik.nextBoolean();
+			
+			pracownik[id] = new Pracownik(nr_pracownika, imie, nazwisko, pensja, urlop);
+		}
+		
+		danePlik.close();
+		ilosc_pracownikow = id;
+	}
+      
+
+
+
+//zapisywanie do PSQL
+	public static void ZapiszDoPSQL ()
+	{
+			try {
+				// Zaladowanie sterownika do obslugi PostgreSQL
+				Class.forName("org.postgresql.Driver");
+
+				// Nawiazywanie polaczenia z baza
+				Connection conn = DriverManager.getConnection("jdbc:postgresql://sigma.ug.edu.pl:5432/BAZA","kliwinski", "HASLO");
+
+
+				System.out.println("Logowanie do bazy powiodlo sie");
+
+				Statement  st = conn.createStatement();
+				PreparedStatement pst;
+				ResultSet rs;
+
+				rs = st.executeQuery("SELECT VERSION()");
+				if (rs.next())
+				{
+					System.out.println(rs.getString(1));
+				}
+
+
+				// Zapis do bazy
+				for (int i=1; i<10; i++)
+				{
+					String stm = "INSERT INTO pracownicy(id, imie, nazwisko, pensja, urlop) VALUES(" + pracownik[i].nr_pracownika +", " + pracownik[i].imie +", " + pracownik[i].nazwisko +", " + pracownik[i].pensja + ", " +pracownik[i].urlop +");";	
+					
+					pst = conn.prepareStatement(stm);
+					pst.executeUpdate();
+				}
+
+				// Odczyt z bazy
+				pst = conn.prepareStatement("SELECT * FROM pracownicy");
+				rs = pst.executeQuery();
+
+				while(rs.next())
+				{
+					System.out.print(rs.getInt(1) + ", ");		// pobranie id
+					System.out.print(rs.getString(2) + ", ");	// pobranie imienia
+					System.out.print(rs.getString(3) + ", ");	// pobranie nazwiska
+					System.out.print(rs.getInt(4) + ", ");		// pobranie pensji
+					System.out.println(rs.getBoolean(5));		// pobranie urlopu
+				}
+
+				conn.close();
+
+			}
+			catch (ClassNotFoundException e)
+			{
+				e.printStackTrace();
+				System.out.append("Brak sterownika");
+			}
+			catch (SQLException e)
+			{
+				e.printStackTrace();
+				System.out.append("Blad w poleceniu PostgreSQL");
+			}
+	}
+	
+	
+/*	
+//zapisywanie z bazy do pliku	
+	
+	 public static void psqlDoPliku (){
+
+		 try {
+	        	Class.forName("org.postgresql.Driver");
+	        	Connection conn = DriverManager.getConnection("jdbc:postgresql://sigma.ug.edu.pl:5432/BAZA","kliwinski", "HASLO");
+	        	System.out.println("Logowanie do bazy powiodlo sie");
+
+				Statement  st = conn.createStatement();
+				PreparedStatement pst;
+				ResultSet rs;
+
+				rs = st.executeQuery("SELECT VERSION()");
+				if (rs.next())
+				{
+					System.out.println(rs.getString(1));
+				}
+
+				
+	            CopyManager cm = new CopyManager((BaseConnection) conn);
+
+	            FileWriter fw = new FileWriter("bazaPSQL.txt");						//nazwa pliku
+	            cm.copyOut("COPY XXX TO STDOUT WITH DELIMITER AS '|'", fw);  //XXX - nazwa tabeli            
+	            
+		        conn.close();
+
+	        } 			
+	        catch (ClassNotFoundException e)
+			{
+				e.printStackTrace();
+				System.out.append("Brak sterownika");
+			}
+			catch (SQLException e)
+			{
+				e.printStackTrace();
+				System.out.append("Blad w poleceniu PostgreSQL");
+			}
+
+	        } 
+*/
+	
+
+
+	
+	
+	
+	
+	
+	
+//odczyt z PSQL	
+	 public static void OdczytZPostgres()
+    {
+		 try {
+				Class.forName("org.postgresql.Driver");
+				Connection conn = DriverManager.getConnection("jdbc:postgresql://sigma.ug.edu.pl:5432/BAZA","kliwinski", "HASLO");
+
+				System.out.println("Logowanie do bazy powiodlo sie");
+
+				Statement  st = conn.createStatement();
+				PreparedStatement pst;
+				ResultSet rs;
+
+				rs = st.executeQuery("SELECT VERSION()");
+				if (rs.next())
+				{
+					System.out.println(rs.getString(1));
+				}
+				
+				
+				int i=0;
+				int j=0;
+				int nr_pracownika;
+				String imie;
+				String nazwisko;
+				int pensja;
+				boolean urlop;
+                   
+
+// Odczyt z bazy
+                pst = conn.prepareStatement("SELECT * FROM pracownicy");
+                rs = pst.executeQuery();
+               
+                 while(rs.next())
+                 {
+                	 nr_pracownika=rs.getInt(1);       
+                	 imie=rs.getString(2);
+                	 nazwisko=rs.getString(3);      
+                	 pensja=rs.getInt(4);    
+                	 urlop=rs.getBoolean(5);
+                           
+ //sprawdzanie czy jest w bazie                        
+ /*               	 for(j=0;j<10;j++)
+                	 {
+                		 if( (pracownik[i].imie==imie)&&(pracownik[j].nazwisko==nazwisko))
+                		 	break;
+                		 else 
+                		 {
+                    		 pracownik[i] = new Pracownik(nr_pracownika, imie, nazwisko,pensja, urlop);	
+                    		 i++;
+                    		 ilosc_pracownikow++;
+                		 }
+                	 }
+*/
+                    }
+			
+ 				conn.close();
+
+ 			}
+ 			catch (ClassNotFoundException e)
+ 			{
+ 				e.printStackTrace();
+ 				System.out.append("Brak sterownika");
+ 			}
+ 			catch (SQLException e)
+ 			{
+ 				e.printStackTrace();
+ 				System.out.append("Blad w poleceniu PostgreSQL");
+ 			}
+ 	}	
+	
+	
+	
+//wyswietlanie menu
+	static void wyswietlMenu()
+	{
+
+		System.out.println("\n a. Wyswietl wszystkich pracownikow");
+		System.out.println("\n b. Dodaj pracownika");
+		System.out.println("\n c. Daj podwyzke dla pracownikow");
+		System.out.println("\n d. Przenies pracownika na urlop");
+		System.out.println("\n e. Zapisz do pliku raport");
+		System.out.println("\n f. Wczytaj liste pracownikow");
+		System.out.println("\n g. Zapis do PSQL");//?
+		System.out.println("\n h. Odczyt z PSQL i dodanie do pliku");//?
+		System.out.println("\n\n x. Zakoncz program\n");
+	}
+
+}
+
+
+
+
+
+
+
+public class Obsluga{
+
+//funkcja wyswietlajaca menu programu i zmieniajaca
+
+	public static void main(String args[])  throws IOException { 
+	
+//	Obsluga o = new Obsluga();
+
+//menu programu
+//wypisanie
+
+	Obsluga1.wyswietlMenu();
+
+		
+	
+//wybór
+	char z;
+		do {
+
+		z = (char)System.in.read();
+			switch (z) {
+					case 'a': 
+						Obsluga1.a();//funkcja wyswietlania wszystkich pracownikow
+						Obsluga1.wyswietlMenu();
+						break;
+					case 'b':
+						Obsluga1.b();//Dodaj pracownika
+						Obsluga1.wyswietlMenu();
+						break;
+					case 'c':
+						Obsluga1.c();//Daj podwyzke dla pracownikow
+						Obsluga1.wyswietlMenu();
+						break;
+					case 'd':
+						Obsluga1.d();//Przenies pracownika na urlop
+						Obsluga1.wyswietlMenu();
+						break;
+					case 'e':
+						Obsluga1.zapiszListePracownikow();//Zapisz do pliku raport
+						Obsluga1.wyswietlMenu();
+						break;
+					case 'f':
+						Obsluga1. WczytajZPliku();//Wczytaj liste pracownikows
+						Obsluga1.wyswietlMenu();
+						break;
+					case 'g':
+						Obsluga1.ZapiszDoPSQL();//Zapis do PSQL
+						Obsluga1.wyswietlMenu();
+						break;
+					case 'h':
+						Obsluga1.zapiszListePracownikow();//Zapisz do pliku raport
+						Obsluga1.wyswietlMenu();
+						break;
+					case 'x':
+						break;
+					default:
+						System.out.println("\nError, podano zly klawisz");
+						break;
+					}
+
+			} while (z != 'x'); 
+	}
+}
+
+
+
+
