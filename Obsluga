@@ -25,6 +25,7 @@ import org.postgresql.copy.CopyManager;
 import org.postgresql.core.BaseConnection;
 */
 
+//KLASA PRACOWNIK
 class Pracownik
 {
    public int nr_pracownika;
@@ -34,7 +35,11 @@ class Pracownik
 	boolean urlop;
 	
 		
-
+		public Pracownik(){
+			imie="";
+			nazwisko="";
+			pensja=0;
+		}
 
 		public Pracownik(int nr_pracownika, String imie, String nazwisko, int pensja, boolean urlop)
 		{
@@ -45,8 +50,90 @@ class Pracownik
 			this.pensja = pensja;
 			this.urlop = urlop;
 		}
+		
+		void WypiszStatus() 
+		{
+			System.out.println("To jest zwykly pracownik");
+		}
 	
 }
+
+
+
+//KLASA Menadżer, która dziedziczy po klasie Pracownik
+
+class Manager extends Pracownik
+{
+	private int bonus=0;
+ 
+	
+	public Manager(int nr_pracownika, String imie, String nazwisko, int pensja, int bonus, boolean urlop)
+	{
+
+		this.nr_pracownika = nr_pracownika;
+		this.imie = imie;
+		this.nazwisko=nazwisko;
+		this.pensja = pensja;
+		this.bonus = bonus;
+		this.urlop = urlop;
+	}
+	
+	
+	void WypiszStatus() 
+	{
+		System.out.println("To jest Manager");
+	}
+}
+
+
+
+//KLASA Informatyk, która dziedziczy po klasie Pracownik
+class Informatyk extends Pracownik
+{
+	private String kwalifikacje;	
+	
+
+	public Informatyk(int nr_pracownika, String imie, String nazwisko, String kwalifikacje, int pensja, boolean urlop)
+	{
+
+		this.nr_pracownika = nr_pracownika;
+		this.imie = imie;
+		this.nazwisko = nazwisko;
+		this.kwalifikacje = kwalifikacje;
+		this.pensja = pensja;
+		this.urlop = urlop;
+	}
+	
+	void WypiszStatus() 
+	{
+		System.out.println("To jest" +kwalifikacje);
+	}
+
+}
+
+
+
+//KLASA Szef, która dziedziczy po klasie Manager
+class Szef extends Manager
+{
+	public Szef(int nr_pracownika, String imie, String nazwisko, int pensja, int bonus, boolean urlop)
+	{
+
+		this.nr_pracownika = nr_pracownika;
+		this.imie = imie;
+		this.nazwisko=nazwisko;
+		this.pensja = pensja;
+		//this.bonus = bonus;
+		this.urlop = urlop;
+	}
+	
+	
+	void WypiszStatus() 
+	{
+		System.out.println("Szef wszystkich szefów -  Krzysztof Jarzyna ze Szczecina");
+	}
+}
+
 
 
 class Obsluga1 {
@@ -56,7 +143,10 @@ class Obsluga1 {
 
 
 	
-	static public Pracownik[] pracownik= new Pracownik[10]; //???
+	static public Pracownik[] pracownik= new Pracownik[10];
+	static public Manager[] manager = new Manager[10];
+	static public Informatyk[] inf = new Informatyk[10];
+	static public Szef[] szef = new Szef[10];
 
 
 
@@ -79,9 +169,11 @@ class Obsluga1 {
 	}
 
 
+
+//###########################################
 //dodaj pracownika
 
-	static  void b() throws IOException 
+	static  void b_prac() throws IOException 
 	{
 		
 		int nr;
@@ -89,8 +181,7 @@ class Obsluga1 {
 		String nazwisko;
 		int pensja;
 		boolean urlop;
-		InputStreamReader isr = new InputStreamReader(System.in);
-		BufferedReader br = new BufferedReader(isr);	
+		
 		
 		if (ilosc_pracownikow<10)
 		{
@@ -116,6 +207,168 @@ class Obsluga1 {
 		} else System.out.println("Stworzono wiecej niz 10 pracownikow, dodawanie zablokowane");
 	}
 
+//dodaj Managera
+	
+	static  void b_manager() throws IOException 
+	{
+		
+		int nr;
+		String imie;
+		String nazwisko;
+		int pensja;
+		boolean urlop;
+		int bonus;
+		
+		
+		if (ilosc_pracownikow<10)
+		{
+		
+			System.out.println("Podaj nr: ");
+			nr=in.nextInt();
+			
+			System.out.println("Podaj imie: ");
+			imie=in.next();
+			
+			System.out.println("Podaj nazwisko: ");
+			nazwisko=in.next();
+
+			System.out.println("Podaj pensje: ");
+			pensja=in.nextInt();
+
+			System.out.println("Bonus: ");
+			bonus=in.nextInt();
+			
+			System.out.println("Urlop?: ");
+			urlop=in.nextBoolean();
+			
+			System.out.print("\n");	
+			manager[ilosc_pracownikow]=new Manager(nr, imie, nazwisko, pensja, bonus, urlop);	
+			ilosc_pracownikow++;
+			
+		} else System.out.println("Stworzono wiecej niz 10 pracownikow, dodawanie zablokowane");
+	}
+
+//dodaj Informatyka
+	static  void b_inf() throws IOException 
+	{
+		
+		int nr;
+		String imie;
+		String nazwisko;
+		String kwalifikacje;
+		int pensja;
+		boolean urlop;
+		
+		
+		if (ilosc_pracownikow<10)
+		{
+		
+			System.out.println("Podaj nr: ");
+			nr=in.nextInt();
+			
+			System.out.println("Podaj imie: ");
+			imie=in.next();
+			
+			System.out.println("Podaj nazwisko: ");
+			nazwisko=in.next();
+			
+			System.out.println("Podaj kwalifikacje: ");
+			kwalifikacje=in.next();
+
+			System.out.println("Podaj pensje: ");
+			pensja=in.nextInt();
+			
+			System.out.println("Urlop?: ");
+			urlop=in.nextBoolean();
+			
+			System.out.print("\n");	
+			inf[ilosc_pracownikow]=new Informatyk(nr, imie, kwalifikacje, nazwisko, pensja, urlop);	
+			ilosc_pracownikow++;
+			
+		} else System.out.println("Stworzono wiecej niz 10 pracownikow, dodawanie zablokowane");
+	}
+
+//dodaj Szefa
+	static  void b_szef() throws IOException 
+	{
+		
+		int nr;
+		String imie;
+		String nazwisko;
+		int pensja;
+		boolean urlop;
+		int bonus;
+		
+		
+		if (ilosc_pracownikow<10)
+		{
+		
+			System.out.println("Podaj nr: ");
+			nr=in.nextInt();
+			
+			System.out.println("Podaj imie: ");
+			imie=in.next();
+			
+			System.out.println("Podaj nazwisko: ");
+			nazwisko=in.next();
+
+			System.out.println("Podaj pensje: ");
+			pensja=in.nextInt();
+
+			System.out.println("Bonus: ");
+			bonus=in.nextInt();
+			
+			System.out.println("Urlop?: ");
+			urlop=in.nextBoolean();
+			
+			System.out.print("\n");	
+			szef[ilosc_pracownikow] = new Szef(nr, imie, nazwisko, pensja, bonus, urlop);	
+			ilosc_pracownikow++;
+			
+		} else System.out.println("Stworzono wiecej niz 10 pracownikow, dodawanie zablokowane");
+	}
+
+//dodawanie pracownikow
+	
+	static void b() throws IOException 
+	{
+	System.out.println("1.pracownika 2.managera 3.informatyka 4.szefa X.powrot");
+	
+	char z;
+	do {
+
+	z = (char)System.in.read();
+		switch (z) {
+				case '1': 
+					Obsluga1.b_prac();//dodaj pracownika
+					Obsluga1.b();
+					break;
+				case '2':
+					Obsluga1.b_manager();//Dodaj managera
+					Obsluga1.b();
+					break;
+				case '3':
+					Obsluga1.b_inf();//Dodaj informatyka
+					Obsluga1.b();
+					break;
+				case '4':
+					Obsluga1.b_szef();//Dodaj szefa
+					Obsluga1.b();
+					break;
+				case 'x':
+					Obsluga1.wyswietlMenu();
+					break;
+				default:
+					//System.out.println("\nError, podano zly klawisz");
+					break;
+				}
+
+		} while (z != 'x'); 
+	}
+	
+//############################################
+	
+
 
 	
 //daj podwyzke
@@ -130,14 +383,12 @@ class Obsluga1 {
 		dolary = in.nextInt();
 		for(int i=0;pracownik[i].nr_pracownika==nr;i++) //zmienic
 		{
-			if(pracownik[i].nr_pracownika==nr){
+			if(pracownik[i].nr_pracownika==nr)
+			{
 				pracownik[i].pensja+=dolary;
-			
 				break;
-			}
-				
+			}	
 		}
-		
 	}
 
 
@@ -158,7 +409,6 @@ class Obsluga1 {
 			}		
 		}
 	}
-
 
 
 //usuwanie pracowników
@@ -194,7 +444,6 @@ class Obsluga1 {
 	}
 
 
-	
 //wczytanie z pliku do programu	
 	static public void WczytajZPliku()throws IOException 
   {
@@ -225,8 +474,6 @@ class Obsluga1 {
 		ilosc_pracownikow = id;
 	}
       
-
-
 
 //zapisywanie do PSQL
 	public static void ZapiszDoPSQL ()
@@ -333,13 +580,6 @@ class Obsluga1 {
 	        } 
 */
 	
-
-
-	
-	
-	
-	
-	
 	
 //odczyt z PSQL	
 	 public static void OdczytZPostgres()
@@ -412,14 +652,13 @@ class Obsluga1 {
  			}
  	}	
 	
-	
-	
+		
 //wyswietlanie menu
 	static void wyswietlMenu()
 	{
 
 		System.out.println("\n a. Wyswietl wszystkich pracownikow");
-		System.out.println("\n b. Dodaj pracownika");
+		System.out.println("\n b. Dodaj: ");
 		System.out.println("\n c. Daj podwyzke dla pracownikow");
 		System.out.println("\n d. Przenies pracownika na urlop");
 		System.out.println("\n e. Zapisz do pliku raport");
@@ -430,8 +669,6 @@ class Obsluga1 {
 	}
 
 }
-
-
 
 
 
@@ -493,7 +730,7 @@ public class Obsluga{
 					case 'x':
 						break;
 					default:
-						System.out.println("\nError, podano zly klawisz");
+						//System.out.println("\nError, podano zly klawisz");
 						break;
 					}
 
